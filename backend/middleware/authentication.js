@@ -5,40 +5,36 @@ import { response } from "express";
 
 
 const isAuthenticated = async (req, res, next) => {
-
-    let token = req.cookies.session;
+    let token;
     
-    if (!token) {
-        const authHeader = req.headers.authorization;
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            token = authHeader.substring(7);
-        }
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
     }
 
     if (!token) {
         return res.status(401).json({
             status: false,
-            message: "no user logged in"
+            message: "No token provided. Please provide a valid token in the Authorization header"
         })
-
     }
 
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        
         if (!decodedToken) {
             return res.status(401).json({
                 status: false,
-                message: "invalid token"
+                message: "Invalid token"
             })
         }
-
 
         const user = await User.findById(decodedToken.userId).select('-password');
 
         if (!user) {
             return res.status(404).json({
                 status: false,
-                message: "user not found"
+                message: "User not found"
             })
         }
 
@@ -46,7 +42,7 @@ const isAuthenticated = async (req, res, next) => {
     } catch (error) {
         return res.status(401).json({
             status: false,
-            message: "invalid token"
+            message: "Invalid token"
         })
     }
 

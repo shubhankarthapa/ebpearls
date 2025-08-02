@@ -148,16 +148,9 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        res.cookie('session', '', {
-            httpOnly: true,
-            expires: new Date(0),
-            secure: true,
-            sameSite: 'strict'
-        });
-
         res.status(200).json({
             status: true,
-            message: "Logged out successfully!"
+            message: "Logged out successfully! Please remove the token from your client-side storage."
         });
     } catch (error) {
         res.status(500).json({

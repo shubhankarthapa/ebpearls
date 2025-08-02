@@ -7,12 +7,6 @@ const token = jwt.sign({
     expiresIn: '5d'
 
 })
-res.cookie('session', token, {
-    maxAge: 5*24*60*60*1000, 
-    httpOnly: true,
-    secure: true,
-    sameSite: 'strict'
-})
 
 return token;
 }
