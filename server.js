@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import userRoutes from "./backend/route/user.route.js";
+import blogRoutes from "./backend/route/blog.route.js";
 import db from "./backend/db/mongodb.js"
 
 
@@ -13,7 +14,10 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use("/users", userRoutes)
+
+const apiPrefix = "/api";
+app.use(`${apiPrefix}/users`, userRoutes);
+app.use(`${apiPrefix}/blogs`, blogRoutes);
 
 
 
